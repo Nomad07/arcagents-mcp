@@ -195,7 +195,7 @@ function guidanceFor(status: number, outcome: PaymentOutcome, retryAfter: string
     case 402:
       return outcome.paymentSigned
         ? "The payment was not accepted (for example rejected at verification). The API did not return data. " +
-            "Check the wallet's USDC balance on the selected payment network. No automatic retry was made."
+            "The reason is in apiResponse. No automatic retry was made."
         : "Payment is required but no payment was made.";
     case 404:
       return "Agent ID not found on Arc Mainnet. Not charged.";

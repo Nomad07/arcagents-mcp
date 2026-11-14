@@ -315,7 +315,7 @@ export class X402Provider implements PaymentProvider {
     }
     if (problems.length > 0) {
       throw new PaymentRefusedError(
-        `The ${spec.label} payment requirement was refused: ${problems.join("; ")}. Nothing was signed.`,
+        `Selected payment requirement was refused (${spec.label}): ${problems.join("; ")}. Nothing was signed.`,
       );
     }
 

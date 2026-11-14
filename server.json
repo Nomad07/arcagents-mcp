@@ -1,7 +1,7 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "io.github.Nomad07/arcagents-mcp",
-  "description": "ERC-8004 agent data from Arc Mainnet, paid per request ($0.002 USDC) via x402 v2 on Arc or Base.",
+  "description": "Arc Agents MCP: ERC-8004 agent data from Arc Mainnet. $0.002 USDC per successful request via x402.",
   "repository": {
     "url": "https://github.com/Nomad07/arcagents-mcp",
     "source": "github"
@@ -39,7 +39,7 @@
         },
         {
           "name": "ARCAGENTS_STATE_DIR",
-          "description": "Private directory for signed but unresolved payments so they are resent, never replaced, after a restart (default ~/.arcagents-mcp).",
+          "description": "Absolute path of a private directory for signed but unresolved payments, so they are resent, never replaced, after a restart (default ~/.arcagents-mcp).",
           "isRequired": false
         }
       ]

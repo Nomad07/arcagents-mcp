@@ -1,10 +1,10 @@
 # Arc Agents MCP
 
-An MCP server that gives AI assistants, agents and other MCP-compatible clients access to ERC-8004 agent data from the [Arc ERC-8004 Explorer](https://www.arcagents.app/) (Arc Agents): agent identity, metadata, reputation and validation data from **Arc Mainnet**, through a single tool: `get_agent_data`.
+Arc Agents MCP gives AI assistants, agents and other MCP-compatible clients access to ERC-8004 agent identity, metadata, reputation and validation data from **Arc Mainnet**, provided by [Arc ERC-8004 Explorer](https://www.arcagents.app/) - the Arc Agents platform - through a single tool: `get_agent_data`.
 
 It is a standard [Model Context Protocol](https://modelcontextprotocol.io/) server over **stdio**. One published npm package works in every client that can launch a local stdio MCP server: Claude Desktop, Cursor, Visual Studio Code, Claude Code, Cline, Gemini CLI, OpenAI Codex, Zed, MCP Inspector, and any other application, AI assistant or agent that supports standard MCP stdio connections.
 
-Each request costs **$0.002 USDC**, paid automatically with [x402](https://docs.x402.org/) v2 (`exact`) from a wallet you control, on **Arc Mainnet** (default) or **Base Mainnet**.
+Each successful request costs **$0.002 USDC**, paid automatically with [x402](https://docs.x402.org/) v2 (`exact`) from a wallet you control, on **Arc Mainnet** (default) or **Base Mainnet**.
 
 - **npm:** https://www.npmjs.com/package/arcagents-mcp
 - **GitHub:** https://github.com/Nomad07/arcagents-mcp
@@ -419,7 +419,7 @@ Ask your assistant something like:
     "explorer": "https://www.arcagents.app",
     "agentOnExplorer": "https://www.arcagents.app/<agent-page>"
   },
-  "fetchedAt": "2026-01-01T00:00:00.000Z"
+  "fetchedAt": "<ISO 8601 timestamp>"
 }
 ```
 
@@ -437,7 +437,7 @@ The skill does not replace the server setup above: the MCP server must be connec
 
 ## Payment behavior and error handling
 
-For each request the server:
+For each new request the server:
 
 1. Sends the request without payment and receives the API's `402` challenge.
 2. Checks that the challenge is x402 version 2 and picks **exactly one** accepted requirement: the one for your `ARCAGENTS_PAYMENT_NETWORK`.
@@ -460,7 +460,7 @@ A `503` caused by an RPC error before settlement is not a paid successful reques
 
 **Interrupted requests.** Before a signed payment is sent, it is saved as one small private file per request in `~/.arcagents-mcp` (or `ARCAGENTS_STATE_DIR`). If a request ends without a final answer (`503`, `500`, `409`, `429`, a timeout, a lost connection, or a response body that could not be read completely), asking again for the same agent ID resends the identical payment, including its `X-UVD-Purchase` context, and does not sign a new one. The saved payment context survives process restarts. The server reuses the same signed payment rather than creating a new authorization. The saved payment is removed once the API gives a final answer (any response other than `5xx`, `409` or `429`) and its body has been read completely. Nothing is retried automatically, and `Retry-After` is reported to you, not waited on.
 
-If two MCP processes request the same agent ID at once, only one sends a payment; the other returns a temporary conflict message, and asking again reuses the saved payment.
+If two MCP processes request the same agent ID at the same time, only one process can claim and send the payment. A competing process does not send another payment: it returns a temporary conflict message, and asking again reuses the saved payment.
 
 A `409` carries a reason: `authorization_already_settled` (the SDK reports the authorization as already used, with payment confirmed) or `receipt_request_conflict` (the authorization belongs to another request; the API does not state whether it settled). Neither triggers a new authorization. If you have confirmed on chain that an earlier payment did not settle, delete that request's file in the state directory to start fresh. If the state cannot be read or written, nothing is signed or sent.
 
@@ -495,7 +495,7 @@ Write the full path in the client configuration (no `~`, no relative path), or r
 Only those two values are accepted. Unset it to use Arc.
 
 **`402` after payment, or "Payment verification failed"**
-The wallet most likely has no USDC on the selected payment network. Fund the wallet on that network (Arc Mainnet, or Base Mainnet if you set `base`) and try again.
+The API did not accept the payment. The reason is in `apiResponse`. A `402` after payment is a final answer: no automatic retry is made, and asking again starts a new request.
 
 **`Payment limit reached`**
 The process has signed `ARCAGENTS_MAX_PAYMENTS` payments. Restart the client to reset the counter, or raise the limit.
@@ -506,8 +506,8 @@ The answer was cut off or timed out while being read. The signed payment is kept
 **`The request did not complete` / timeouts**
 A payment may have been signed before the timeout. Ask again for the same agent ID: the same signed payment is resent (never a new one) until the API gives a final answer, so you are not charged twice. Raise `ARCAGENTS_TIMEOUT_MS` if your connection is slow.
 
-**`The Arc Mainnet payment requirement was refused`**
-The API's challenge did not match what this server is willing to sign (wrong token, amount, domain or timeout). Nothing was signed. Check for a newer `arcagents-mcp` release.
+**`Selected payment requirement was refused`** (or **`The API challenge must contain exactly one <network> payment option`**)
+The API's challenge did not match what this server is willing to sign (wrong token, amount, domain or timeout, or no single option for your payment network). Nothing was signed. Check for a newer `arcagents-mcp` release.
 
 **`Payment state could not be saved` / `could not be read`**
 The server saves each signed payment before sending it and refuses to pay if it cannot. Set `ARCAGENTS_STATE_DIR` to a writable directory, or repair the directory it names (remove a request's file only after checking the earlier payment on chain).

@@ -3,8 +3,8 @@
  *
  * The API client and the MCP tool only know this interface. Everything that is
  * specific to a payment protocol (x402 today) lives behind it, so a different
- * provider (for example MPP) can be added later by implementing PaymentProvider
- * and choosing it at startup, without touching the tool or the API client.
+ * provider can be added later by implementing PaymentProvider and choosing it
+ * at startup, without touching the tool or the API client.
  *
  * Contract for implementers:
  *  - fetchPaid() performs ONE logical paid request. It never tries another

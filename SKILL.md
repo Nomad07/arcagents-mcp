@@ -2,7 +2,7 @@
 name: arcagents-mcp
 description: Retrieve and explain ERC-8004 agent data from Arc Mainnet (identity, owner, agent wallet, metadata, reputation feedback, validation) through the Arc Agents MCP server and its paid get_agent_data tool. Use when the user asks about an ERC-8004 agent ID on Arc, wants an agent's registration, metadata or reputation summarized or compared, or asks how to connect or pay for Arc Agents MCP.
 license: MIT
-compatibility: Requires an MCP client that can launch local stdio servers, Node.js 20 or newer, and network access. Each request costs $0.002 USDC, paid from a dedicated EVM wallet whose private key is set as EVM_PRIVATE_KEY in the MCP server configuration by the user, never in chat.
+compatibility: Requires an MCP client that can launch local stdio servers, Node.js 20 or newer, and network access. Each successful request costs $0.002 USDC, paid from a dedicated EVM wallet whose private key is set as EVM_PRIVATE_KEY in the MCP server configuration by the user, never in chat.
 metadata:
   author: Nomad07
   version: "1.0.0"
@@ -14,7 +14,7 @@ metadata:
 
 Arc Agents MCP is a standard Model Context Protocol (MCP) server that gives AI assistants access to ERC-8004 agent data on Arc Mainnet. ERC-8004 is an onchain registry standard for agent identity, reputation and validation.
 
-The server reads from the paid API of the Arc ERC-8004 Explorer (https://www.arcagents.app, branded Arc Agents). It exposes one tool, `get_agent_data`, and pays for each request automatically from a wallet the user controls.
+The server reads from the paid API of Arc ERC-8004 Explorer - the Arc Agents platform - at https://www.arcagents.app. It exposes one tool, `get_agent_data`, and pays for each request automatically from a wallet the user controls.
 
 ## Quick Start
 
@@ -119,9 +119,10 @@ When answering, distinguish what the API returned from your own interpretation, 
 - The server saves pending payment state locally (in `~/.arcagents-mcp`, or `ARCAGENTS_STATE_DIR`) before sending a signed payment. If a request is interrupted, asking again for the **same agent ID** resumes it: the server resends the identical signed payment and does not sign a new one. This also works after the MCP server restarts.
 - **503, a timeout, or an incomplete response** means there may be no final result yet. Report that to the user, respect any `Retry-After` value, and, after that delay, call `get_agent_data` again with the same `agentId`. The server resumes the same payment context instead of paying twice. Do not retry in a tight loop.
 - **409 conflict** (the authorization was already used, or belongs to another request) must not trigger a new authorization. Report the `reason` in the response as given: `authorization_already_settled` means the facilitator reports that authorization as already used with its payment confirmed; `receipt_request_conflict` means it belongs to another request, and the API does not say whether that payment settled. Do not guess which. The server keeps the existing signed payment and will not create a new one for that agent ID.
-- **500** means settlement failed or could not be confirmed. Do not sign or request a new payment; tell the user and pass on any transaction hash in the response.
+- **402 after payment** means the API did not accept the payment. Report the reason given in the response. It is a final answer, so asking again starts a new request.
+- **500** means settlement failed or could not be confirmed. Do not sign or request a new payment; tell the user and pass on any transaction hash in the response. Asking again for the same agent ID only resends the same signed payment.
 - **404** means the agent ID is not minted on Arc Mainnet; the request is not charged.
-- A message such as "another process already holds a signed, unresolved payment" is a temporary conflict. Nothing was sent. Ask again later; the existing payment is reused.
+- A message such as "another process already holds a signed, unresolved payment" is a temporary conflict. Only one process can claim and send a payment for a request, and the competing process sends nothing. Ask again later; the existing payment is reused.
 - Do not claim a request was free, unpaid or not charged when its payment outcome is uncertain. Say the outcome could not be determined and what the response states.
 - Do not invent agent data, transaction hashes, balances or payment results. If the tool returns an error, quote the error and its guidance rather than paraphrasing it into something more optimistic.
 
