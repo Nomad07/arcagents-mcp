@@ -1,0 +1,48 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.Nomad07/arcagents-mcp",
+  "description": "ERC-8004 agent data from Arc Mainnet, paid per request ($0.002 USDC) via x402 v2 on Arc or Base.",
+  "repository": {
+    "url": "https://github.com/Nomad07/arcagents-mcp",
+    "source": "github"
+  },
+  "version": "1.0.0",
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "arcagents-mcp",
+      "version": "1.0.0",
+      "transport": {
+        "type": "stdio"
+      },
+      "environmentVariables": [
+        {
+          "name": "EVM_PRIVATE_KEY",
+          "description": "Private key of a dedicated wallet holding a small USDC balance on the payment network. Pays $0.002 per request via x402.",
+          "isRequired": true,
+          "isSecret": true
+        },
+        {
+          "name": "ARCAGENTS_PAYMENT_NETWORK",
+          "description": "Payment network: arc (default) or base. ERC-8004 data always comes from Arc Mainnet.",
+          "isRequired": false
+        },
+        {
+          "name": "ARCAGENTS_MAX_PAYMENTS",
+          "description": "Maximum payments signed per session (integer 1-1000, default 50).",
+          "isRequired": false
+        },
+        {
+          "name": "ARCAGENTS_TIMEOUT_MS",
+          "description": "Total timeout for one tool call in milliseconds (1000-120000, default 30000).",
+          "isRequired": false
+        },
+        {
+          "name": "ARCAGENTS_STATE_DIR",
+          "description": "Private directory for signed but unresolved payments so they are resent, never replaced, after a restart (default ~/.arcagents-mcp).",
+          "isRequired": false
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,55 @@
+{
+  "name": "arcagents-mcp",
+  "version": "1.0.0",
+  "description": "Arc Agents MCP: MCP server for the Arc ERC-8004 Explorer API. ERC-8004 agent identity, metadata, reputation and validation data from Arc Mainnet, paid per call in USDC via x402 v2 on Arc or Base",
+  "mcpName": "io.github.Nomad07/arcagents-mcp",
+  "type": "module",
+  "license": "MIT",
+  "author": "Nomad07",
+  "homepage": "https://github.com/Nomad07/arcagents-mcp#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Nomad07/arcagents-mcp.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Nomad07/arcagents-mcp/issues"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "arc",
+    "erc-8004",
+    "ai-agents",
+    "x402",
+    "usdc",
+    "stdio"
+  ],
+  "main": "./dist/index.js",
+  "bin": {
+    "arcagents-mcp": "dist/index.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "SKILL.md",
+    ".env.example"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json && node -e \"require('node:fs').chmodSync('dist/index.js', 0o755)\"",
+    "start": "node dist/index.js",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.32.2",
+    "uvd-x402-sdk": "2.116.0",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@types/node": "^20.19.0",
+    "typescript": "^5.9.3"
+  }
+}
