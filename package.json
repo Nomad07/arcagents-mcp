@@ -33,7 +33,8 @@
     "README.md",
     "LICENSE",
     "SKILL.md",
-    ".env.example"
+    ".env.example",
+    "assets"
   ],
   "engines": {
     "node": ">=20"
