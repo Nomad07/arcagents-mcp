@@ -12,7 +12,7 @@
 import { readFileSync } from "node:fs";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
-import { z } from "zod";
+import { z } from "zod/v4";
 import { ArcAgentsApi } from "./api.js";
 import { ConfigError, PRICE_USDC, makeRedactor, parseConfig, type Config } from "./config.js";
 import { PaymentLimiter, type PaymentProvider } from "./payment/provider.js";

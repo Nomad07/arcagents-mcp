@@ -1,3 +1,5 @@
+![Arc Agents MCP](assets/arcagents-mcp-banner.png)
+
 # Arc Agents MCP
 
 Arc Agents MCP gives AI assistants, agents and other MCP-compatible clients access to ERC-8004 agent identity, metadata, reputation and validation data from **Arc Mainnet**, provided by [Arc ERC-8004 Explorer](https://www.arcagents.app/) - the Arc Agents platform - through a single tool: `get_agent_data`.
