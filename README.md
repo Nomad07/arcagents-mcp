@@ -56,14 +56,14 @@ Some data may be unavailable for a given agent or registry deployment. Errors fr
 - A dedicated EVM wallet with a small USDC balance on Arc Mainnet (or Base Mainnet if you select `base`)
 - An MCP client that can launch local stdio servers
 
-No clone and no build step: every client below launches the published package with `npx -y arcagents-mcp`.
+No clone and no build step: every client below launches the published package with `npx -y arcagents-mcp@1.0.1`.
 
 ## Install
 
-You do not need to install anything by hand. Your MCP client runs `npx -y arcagents-mcp` and npm downloads the package on first use. To install it globally instead:
+You do not need to install anything by hand. Your MCP client runs `npx -y arcagents-mcp@1.0.1` and npm downloads the package on first use. To install it globally instead:
 
 ```bash
-npm install -g arcagents-mcp
+npm install -g arcagents-mcp@1.0.1
 ```
 
 then use `arcagents-mcp` as the command (with no arguments) in the configurations below.
@@ -86,9 +86,9 @@ A documented template is in [`.env.example`](.env.example). MCP clients pass the
 
 ## Setup by client
 
-Every client launches the same command: `npx -y arcagents-mcp`. Replace `YOUR_EVM_PRIVATE_KEY` with the key of your dedicated wallet. Set `ARCAGENTS_PAYMENT_NETWORK` to `base` to pay on Base instead of Arc. The server runs over stdio: launched by hand (with `EVM_PRIVATE_KEY` set), it prints a one-line readiness message on stderr and waits for a client.
+Every client launches the same command: `npx -y arcagents-mcp@1.0.1`. Replace `YOUR_EVM_PRIVATE_KEY` with the key of your dedicated wallet. Set `ARCAGENTS_PAYMENT_NETWORK` to `base` to pay on Base instead of Arc. The server runs over stdio: launched by hand (with `EVM_PRIVATE_KEY` set), it prints a one-line readiness message on stderr and waits for a client.
 
-> On Windows, if a client cannot start `npx` directly, use `"command": "cmd"` with `"args": ["/c", "npx", "-y", "arcagents-mcp"]`.
+> On Windows, if a client cannot start `npx` directly, use `"command": "cmd"` with `"args": ["/c", "npx", "-y", "arcagents-mcp@1.0.1"]`.
 
 ### 1. Claude Desktop
 
@@ -102,7 +102,7 @@ Open **Settings > Developer > Edit Config**, or edit `claude_desktop_config.json
   "mcpServers": {
     "arcagents": {
       "command": "npx",
-      "args": ["-y", "arcagents-mcp"],
+      "args": ["-y", "arcagents-mcp@1.0.1"],
       "env": {
         "EVM_PRIVATE_KEY": "YOUR_EVM_PRIVATE_KEY",
         "ARCAGENTS_PAYMENT_NETWORK": "arc"
@@ -123,7 +123,7 @@ Edit `~/.cursor/mcp.json` (all projects) or `.cursor/mcp.json` in a project, or 
   "mcpServers": {
     "arcagents": {
       "command": "npx",
-      "args": ["-y", "arcagents-mcp"],
+      "args": ["-y", "arcagents-mcp@1.0.1"],
       "env": {
         "EVM_PRIVATE_KEY": "YOUR_EVM_PRIVATE_KEY",
         "ARCAGENTS_PAYMENT_NETWORK": "arc"
@@ -142,7 +142,7 @@ Current VS Code (Copilot) reads MCP servers from a top-level `mcpServers` object
 - **Workspace:** `.mcp.json` in the workspace root (shareable with your team)
 - **User (all workspaces):** `~/.copilot/mcp-config.json`
 
-You can also add a server from the UI: **Chat: Open Customizations**, then **MCP Servers**, **Add Server**, **Command (stdio)**, with command `npx -y arcagents-mcp`.
+You can also add a server from the UI: **Chat: Open Customizations**, then **MCP Servers**, **Add Server**, **Command (stdio)**, with command `npx -y arcagents-mcp@1.0.1`.
 
 ```json
 {
@@ -150,7 +150,7 @@ You can also add a server from the UI: **Chat: Open Customizations**, then **MCP
     "arcagents": {
       "type": "stdio",
       "command": "npx",
-      "args": ["-y", "arcagents-mcp"],
+      "args": ["-y", "arcagents-mcp@1.0.1"],
       "env": {
         "EVM_PRIVATE_KEY": "${EVM_PRIVATE_KEY}",
         "ARCAGENTS_PAYMENT_NETWORK": "arc"
@@ -179,7 +179,7 @@ You can also add a server from the UI: **Chat: Open Customizations**, then **MCP
     "arcagents": {
       "type": "stdio",
       "command": "npx",
-      "args": ["-y", "arcagents-mcp"],
+      "args": ["-y", "arcagents-mcp@1.0.1"],
       "env": {
         "EVM_PRIVATE_KEY": "${input:evm-private-key}",
         "ARCAGENTS_PAYMENT_NETWORK": "arc"
@@ -197,7 +197,7 @@ Add the server with one command (user scope makes it available in every project)
 claude mcp add --transport stdio --scope user \
   --env EVM_PRIVATE_KEY=YOUR_EVM_PRIVATE_KEY \
   --env ARCAGENTS_PAYMENT_NETWORK=arc \
-  arcagents -- npx -y arcagents-mcp
+  arcagents -- npx -y arcagents-mcp@1.0.1
 ```
 
 Or share it with a team through a project-level `.mcp.json` that reads the key from each developer's environment:
@@ -207,7 +207,7 @@ Or share it with a team through a project-level `.mcp.json` that reads the key f
   "mcpServers": {
     "arcagents": {
       "command": "npx",
-      "args": ["-y", "arcagents-mcp"],
+      "args": ["-y", "arcagents-mcp@1.0.1"],
       "env": {
         "EVM_PRIVATE_KEY": "${EVM_PRIVATE_KEY}",
         "ARCAGENTS_PAYMENT_NETWORK": "arc"
@@ -228,7 +228,7 @@ In the Cline panel open **MCP Servers > Configure > Configure MCP Servers**. Thi
   "mcpServers": {
     "arcagents": {
       "command": "npx",
-      "args": ["-y", "arcagents-mcp"],
+      "args": ["-y", "arcagents-mcp@1.0.1"],
       "env": {
         "EVM_PRIVATE_KEY": "YOUR_EVM_PRIVATE_KEY",
         "ARCAGENTS_PAYMENT_NETWORK": "arc"
@@ -251,7 +251,7 @@ Edit `~/.gemini/settings.json` (all projects) or `.gemini/settings.json` (one pr
   "mcpServers": {
     "arcagents": {
       "command": "npx",
-      "args": ["-y", "arcagents-mcp"],
+      "args": ["-y", "arcagents-mcp@1.0.1"],
       "env": {
         "EVM_PRIVATE_KEY": "$EVM_PRIVATE_KEY",
         "ARCAGENTS_PAYMENT_NETWORK": "arc"
@@ -264,7 +264,7 @@ Edit `~/.gemini/settings.json` (all projects) or `.gemini/settings.json` (one pr
 Gemini CLI expands `$EVM_PRIVATE_KEY` from your shell, so export it first (`export EVM_PRIVATE_KEY=0x...`). Variables listed explicitly in `env` are passed to the server even though Gemini CLI redacts key-like variables from the inherited environment. Or add it from the command line. The `--` makes everything after it, including `-y`, arguments of `npx` rather than options of `gemini`:
 
 ```bash
-gemini mcp add -s user -e EVM_PRIVATE_KEY=YOUR_EVM_PRIVATE_KEY -e ARCAGENTS_PAYMENT_NETWORK=arc arcagents npx -- -y arcagents-mcp
+gemini mcp add -s user -e EVM_PRIVATE_KEY=YOUR_EVM_PRIVATE_KEY -e ARCAGENTS_PAYMENT_NETWORK=arc arcagents npx -- -y arcagents-mcp@1.0.1
 ```
 
 Run `/mcp` inside Gemini CLI to confirm it is connected.
@@ -276,7 +276,7 @@ Edit `~/.codex/config.toml` (or `.codex/config.toml` in a trusted project):
 ```toml
 [mcp_servers.arcagents]
 command = "npx"
-args = ["-y", "arcagents-mcp"]
+args = ["-y", "arcagents-mcp@1.0.1"]
 startup_timeout_sec = 60
 # Forward the key from your shell environment instead of writing it in this file:
 env_vars = ["EVM_PRIVATE_KEY"]
@@ -291,7 +291,7 @@ ARCAGENTS_PAYMENT_NETWORK = "arc"
 codex mcp add arcagents \
   --env EVM_PRIVATE_KEY=YOUR_EVM_PRIVATE_KEY \
   --env ARCAGENTS_PAYMENT_NETWORK=arc \
-  -- npx -y arcagents-mcp
+  -- npx -y arcagents-mcp@1.0.1
 ```
 
 Run `/mcp` in the Codex TUI to confirm.
@@ -305,7 +305,7 @@ Open the settings file (**zed: open settings file**) and add a custom server und
   "context_servers": {
     "arcagents": {
       "command": "npx",
-      "args": ["-y", "arcagents-mcp"],
+      "args": ["-y", "arcagents-mcp@1.0.1"],
       "env": {
         "EVM_PRIVATE_KEY": "YOUR_EVM_PRIVATE_KEY",
         "ARCAGENTS_PAYMENT_NETWORK": "arc"
@@ -325,7 +325,7 @@ Open the Agent Panel settings and check that the server shows a green indicator,
 npx @modelcontextprotocol/inspector \
   -e EVM_PRIVATE_KEY=YOUR_EVM_PRIVATE_KEY \
   -e ARCAGENTS_PAYMENT_NETWORK=arc \
-  npx -y arcagents-mcp
+  npx -y arcagents-mcp@1.0.1
 ```
 
 Pass the variables with `-e`: Inspector does not forward your shell's environment to the server.
@@ -336,7 +336,7 @@ Or open the Inspector UI (`npx @modelcontextprotocol/inspector`) and fill in:
 |---|---|
 | Transport Type | `STDIO` |
 | Command | `npx` |
-| Arguments | `-y arcagents-mcp` |
+| Arguments | `-y arcagents-mcp@1.0.1` |
 | Environment Variables | `EVM_PRIVATE_KEY`, and optionally `ARCAGENTS_PAYMENT_NETWORK` |
 
 Click **Connect**, open **Tools > List Tools** to see `get_agent_data`. Running the tool makes a real $0.002 payment. To list the tools without paying, use CLI mode:
@@ -344,12 +344,12 @@ Click **Connect**, open **Tools > List Tools** to see `get_agent_data`. Running 
 ```bash
 npx @modelcontextprotocol/inspector --cli \
   -e EVM_PRIVATE_KEY=YOUR_EVM_PRIVATE_KEY \
-  npx -y arcagents-mcp --method tools/list
+  npx -y arcagents-mcp@1.0.1 --method tools/list
 ```
 
 ### Any other MCP client
 
-Any application, AI assistant or agent that supports standard MCP stdio connections can use this server. Configure it to launch `npx` with arguments `-y arcagents-mcp` and pass `EVM_PRIVATE_KEY` in the process environment. Clients that cannot launch local stdio servers (for example web-only chat apps that only accept remote HTTP MCP URLs) cannot use it.
+Any application, AI assistant or agent that supports standard MCP stdio connections can use this server. Configure it to launch `npx` with arguments `-y arcagents-mcp@1.0.1` and pass `EVM_PRIVATE_KEY` in the process environment. Clients that cannot launch local stdio servers (for example web-only chat apps that only accept remote HTTP MCP URLs) cannot use it.
 
 ---
 
@@ -485,7 +485,7 @@ API errors return the HTTP status, `retryAfter` when present, the API's original
 ## Troubleshooting
 
 **The server does not appear in my client.**
-Check the config file path and JSON/TOML syntax, then restart the client fully. Confirm `node --version` is 20 or newer and `npx` is on the `PATH` the client uses. On the first run `npx` downloads the package, which can exceed a client's startup timeout; run `npx -y arcagents-mcp` once in a terminal (it prints a readiness line and waits), then restart the client.
+Check the config file path and JSON/TOML syntax, then restart the client fully. Confirm `node --version` is 20 or newer and `npx` is on the `PATH` the client uses. On the first run `npx` downloads the package, which can exceed a client's startup timeout; run `npx -y arcagents-mcp@1.0.1` once in a terminal (it prints a readiness line and waits), then restart the client.
 
 **`EVM_PRIVATE_KEY is missing or malformed`**
 The key must be `0x` followed by exactly 64 hex characters, with no spaces or quotes inside the value.
