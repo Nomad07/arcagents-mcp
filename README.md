@@ -6,6 +6,8 @@ Arc Agents MCP gives AI assistants, agents and other MCP-compatible clients acce
 
 It is a standard [Model Context Protocol](https://modelcontextprotocol.io/) server over **stdio**. One published npm package works in every client that can launch a local stdio MCP server: Claude Desktop, Cursor, Visual Studio Code, Claude Code, Cline, Gemini CLI, OpenAI Codex, Zed, MCP Inspector, and any other application, AI assistant or agent that supports standard MCP stdio connections.
 
+[![Arc Agents MCP server](https://mcprush.com/badge/arcagents-mcp/card.svg)](https://mcprush.com/to/arcagents-mcp?ref=badge)
+
 Each successful request costs **$0.002 USDC**, paid automatically with [x402](https://docs.x402.org/) v2 (`exact`) from a wallet you control, on **Arc Mainnet** (default) or **Base Mainnet**.
 
 - **npm:** https://www.npmjs.com/package/arcagents-mcp
