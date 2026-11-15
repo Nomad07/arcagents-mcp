@@ -5,7 +5,7 @@ license: MIT
 compatibility: Requires an MCP client that can launch local stdio servers, Node.js 20 or newer, and network access. Each successful request costs $0.002 USDC, paid from a dedicated EVM wallet whose private key is set as EVM_PRIVATE_KEY in the MCP server configuration by the user, never in chat.
 metadata:
   author: Nomad07
-  version: "1.0.0"
+  version: "1.0.1"
 ---
 
 # Arc Agents MCP
@@ -21,7 +21,7 @@ The server reads from the paid API of Arc ERC-8004 Explorer - the Arc Agents pla
 The user (not you) connects the server by adding it to their MCP client configuration. The launch command is:
 
 ```
-npx -y arcagents-mcp
+npx -y arcagents-mcp@1.0.1
 ```
 
 Requirements:
@@ -37,7 +37,7 @@ Example configuration block (most clients use this `mcpServers` shape; the place
   "mcpServers": {
     "arcagents": {
       "command": "npx",
-      "args": ["-y", "arcagents-mcp"],
+      "args": ["-y", "arcagents-mcp@1.0.1"],
       "env": {
         "EVM_PRIVATE_KEY": "YOUR_EVM_PRIVATE_KEY",
         "ARCAGENTS_PAYMENT_NETWORK": "arc"
