@@ -1,6 +1,6 @@
 {
   "name": "arcagents-mcp",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Arc Agents MCP: MCP server for the Arc ERC-8004 Explorer API. ERC-8004 agent identity, metadata, reputation and validation data from Arc Mainnet, paid per successful request in USDC via x402 v2 on Arc or Base",
   "mcpName": "io.github.Nomad07/arcagents-mcp",
   "type": "module",
