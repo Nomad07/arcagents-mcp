@@ -105,6 +105,38 @@ function isPaymentFailure(error: unknown): error is PaymentRefusedError | Paymen
   );
 }
 
+/**
+ * uvd-x402-sdk 2.116.0 receives the accepted payment requirement in createPayment() but its EVM
+ * path encodes only { x402Version, scheme, network, payload }. x402 v2 servers match a payment
+ * against its `accepted` requirement, so this wrapper adds the exact `accepted` object (and the
+ * `resource` and `extensions` the SDK was given, when present) to the encoded header. The
+ * authorization and signature in `payload` are not touched. Because the SDK builds the
+ * PAYMENT-SIGNATURE header, and the pending-payment record, from the returned value, the added
+ * fields are sent and persisted consistently.
+ */
+function includeAcceptedRequirement(client: X402Client): void {
+  const sdkCreatePayment = client.createPayment.bind(client);
+  client.createPayment = async (info) => {
+    const result = await sdkCreatePayment(info);
+    if (!info.accepted) return result;
+
+    const decoded = JSON.parse(Buffer.from(result.paymentHeader, "base64").toString("utf8")) as Record<string, unknown>;
+    if (decoded === null || typeof decoded !== "object" || Array.isArray(decoded)) {
+      throw new Error("the payment SDK returned an unexpected payment header");
+    }
+    if (decoded.accepted === undefined) decoded.accepted = info.accepted;
+    if (decoded.resource === undefined && info.resource !== undefined) decoded.resource = info.resource;
+    if (decoded.extensions === undefined && info.extensions !== undefined) decoded.extensions = info.extensions;
+
+    const paymentHeader = Buffer.from(JSON.stringify(decoded), "utf8").toString("base64");
+    return {
+      ...result,
+      paymentHeader,
+      headers: { ...result.headers, "X-PAYMENT": paymentHeader, "PAYMENT-SIGNATURE": paymentHeader },
+    };
+  };
+}
+
 export async function createX402Provider(options: X402ProviderOptions): Promise<X402Provider> {
   const spec = NETWORKS[options.config.paymentNetwork];
   const client = new X402Client({
@@ -112,6 +144,7 @@ export async function createX402Provider(options: X402ProviderOptions): Promise<
     x402Version: 2,
     debug: false,
   });
+  includeAcceptedRequirement(client);
   const payer = await client.connectWithPrivateKey(options.config.privateKey, spec.sdkName);
   return new X402Provider(client, spec, payer, options);
 }
